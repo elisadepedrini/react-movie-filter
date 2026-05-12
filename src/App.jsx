@@ -2,12 +2,21 @@ import { useEffect, useState } from "react";
 import { list_film } from "./data/app_data";
 
 function App() {
+  const [genre, setGenre] = useState("");
+  const [film, setFilm] = useState([]);
 
-  const [genre, setGenre] = useState("")
+  useEffect(() => {
+    
+    if (genre === "") {
+      setFilm(list_film);
+    } else {
+      const filteredFilm = list_film.filter((singleFilm) => {
+        return singleFilm.genre === genre;
+      });
+      setFilm(filteredFilm);
+    }
 
-  console.log(genre);
-  
-  
+  }, [genre]);
 
   return (
     <>
@@ -17,23 +26,24 @@ function App() {
 
       <main>
         {/* INPUT */}
-        <select className="form-select w-25 mx-auto mb-5" onChange={() => setGenre(event.target.value)}>
-          <option>Quale genere di film vuoi guardare oggi?</option>
-          <option value="Fntascienza">Fantascienza</option>
+        <select
+          className="form-select w-25 mx-auto mb-5"
+          onChange={() => setGenre(event.target.value)}
+        >
+          <option value="">Quale genere di film vuoi guardare oggi?</option>
+          <option value="Fantascienza">Fantascienza</option>
           <option value="Thriller">Thriller</option>
           <option value="Romantico">Romantico</option>
           <option value="Azione">Azione</option>
         </select>
-        
-    
 
         {/* CARD FILM */}
         <div className="d-flex justify-content-around">
-          {list_film.map((film, index) => (
+          {film.map((singleFilm, index) => (
             <div className="card text-start" key={index}>
               <div className="card-body">
-                <h4 className="card-title">{film.title}</h4>
-                <p className="card-text">{film.genre}</p>
+                <h4 className="card-title">{singleFilm.title}</h4>
+                <p className="card-text">{singleFilm.genre}</p>
               </div>
             </div>
           ))}
